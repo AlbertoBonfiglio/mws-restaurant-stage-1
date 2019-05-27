@@ -23,7 +23,7 @@ fetchNeighborhoods = () => {
       fillNeighborhoodsHTML();
     }
   });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -36,7 +36,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     option.value = neighborhood;
     select.append(option);
   });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -50,7 +50,7 @@ fetchCuisines = () => {
       fillCuisinesHTML();
     }
   });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -64,7 +64,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
     option.value = cuisine;
     select.append(option);
   });
-}
+};
 
 /**
  * Initialize leaflet map, called from HTML.
@@ -75,6 +75,7 @@ initMap = () => {
         zoom: 12,
         scrollWheelZoom: false
       });
+
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
     mapboxToken: 'pk.eyJ1IjoiYWxiZXJ0b2JvbmZpZ2xpbyIsImEiOiJjanVsamJocXMyN29xM3lwNHpkNWt3OHpoIn0.Iuu6SZ8YMlT_yhF_1ChkeA',
     maxZoom: 18,
@@ -120,8 +121,8 @@ updateRestaurants = () => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     }
-  })
-}
+  });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -138,7 +139,7 @@ resetRestaurants = (restaurants) => {
   }
   self.markers = [];
   self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
@@ -150,7 +151,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   });
   el.append(createFlexSpacer());
   addMarkersToMap();
-}
+};
 
 /**
  * Create restaurant HTML.
@@ -196,6 +197,7 @@ createFlexSpacer = () => {
   el.className = 'spacer';
   return el;
 };
+
 /**
  * Add markers for current restaurants to the map.
  */
@@ -210,7 +212,8 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 
-} 
+};
+
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
