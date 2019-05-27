@@ -1,0 +1,110 @@
+/* ====================== Restaurant Listing ====================== */
+#restaurants-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    background-color: #f3f3f3;
+    margin-left: auto;
+    margin-right: auto;
+    /* padding: 2rem 1rem 4rem;*/
+    text-align: center;
+  }
+
+#restaurants-list div {
+    flex-grow: 1;
+    background-color: #fff;
+    background-color: purple;
+    border: 2px solid #ccc;
+    font-family: Arial,sans-serif;
+    margin: 1rem;
+    min-height: 380px;
+    padding: 0 1rem 1rem;
+    text-align: left;
+    width: 100%;
+}
+
+/* hides the last child */
+#restaurants-list div:last-child {
+  content: '';
+  visibility: hidden;
+  flex-grow: 1000000000;
+  max-height: 1px !important;
+}
+
+@media screen and (min-width: 568px){
+  #restaurants-list div {
+    width: 50%;
+    background-color: orange;
+  }
+}
+
+@media screen and (min-width: 768px){
+  #restaurants-list div {
+    width: 33.333%;
+    background-color: aqua;
+  }
+}
+
+@media screen and (min-width: 992px){
+  #restaurants-list div {
+    width: 25%;
+    background-color: saddlebrown;
+   
+  }
+}
+
+@media screen and (min-width: 1200px){
+  #restaurants-list {
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #restaurants-list div {
+    width: 25%;
+    width: calc(100%/5);
+    background-color: goldenrod;
+  }
+  
+}
+
+
+  #restaurants-list .restaurant-img {
+    background-color: #ccc;
+    display: block;
+    margin: 0;
+    /* min-height: 248px;*/
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+
+  #restaurants-list div h1 {
+    color: #f18200;
+    font-family: Arial,sans-serif;
+    font-size: 14pt;
+    font-weight: 200;
+    letter-spacing: 0;
+    line-height: 1.3;
+    margin: 1rem  0 .75rem;
+    text-transform: uppercase;
+    white-space: normal;
+  }
+  #restaurants-list p {
+    margin: 0;
+    font-size: 11pt;
+    white-space: normal;
+  }
+  #restaurants-list div a {
+    background-color: orange;
+    border-bottom: 3px solid #eee;
+    color: #fff;
+    display: inline-block;
+    font-size: 10pt;
+    margin: 15px 0 0;
+    padding: 8px 30px 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+  }

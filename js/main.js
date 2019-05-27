@@ -1,7 +1,5 @@
-let restaurants,
-  neighborhoods,
-  cuisines
-var newMap
+let restaurants, neighborhoods, cuisines;
+var newMap;
 var markers = []
 
 /**
@@ -87,7 +85,8 @@ initMap = () => {
   }).addTo(newMap);
 
   updateRestaurants();
-}
+};
+
 /* window.initMap = () => {
   let loc = {
     lat: 40.722216,
@@ -130,8 +129,8 @@ updateRestaurants = () => {
 resetRestaurants = (restaurants) => {
   // Remove all restaurants
   self.restaurants = [];
-  const ul = document.getElementById('restaurants-list');
-  ul.innerHTML = '';
+  const el = document.getElementById('restaurants-list');
+  el.innerHTML = '';
 
   // Remove all map markers
   if (self.markers) {
@@ -145,10 +144,11 @@ resetRestaurants = (restaurants) => {
  * Create all restaurants HTML and add them to the webpage.
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
-  const ul = document.getElementById('restaurants-list');
+  const el = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
-    ul.append(createRestaurantHTML(restaurant));
+    el.append(createRestaurantHTML(restaurant));
   });
+  el.append(createFlexSpacer());
   addMarkersToMap();
 }
 
@@ -156,33 +156,46 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
-  const li = document.createElement('li');
+  const el = document.createElement('div');
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
+  el.append(image);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
-  li.append(name);
+  el.append(name);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
+  el.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
-  li.append(address);
+  el.append(address);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  el.append(more);
 
-  return li
-}
+  return el;
+};
 
+/** 
+ * Flex has issues with the last item when growth is set to 1
+ * So we insert a dummy div wuth flex-growth set to a ridicoulous number 
+ * to keep the formatting somewhat right when the number of items in the 
+ * last row is less than the mumber of items in the previous rows
+ * This will make the dummy div expand tofill the space.
+ * Then wi hide it with visibility: hidden 
+ * */ 
+createFlexSpacer = () => {
+  const el = document.createElement('div');
+  el.className = 'spacer';
+  return el;
+};
 /**
  * Add markers for current restaurants to the map.
  */
