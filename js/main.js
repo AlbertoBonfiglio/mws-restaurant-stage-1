@@ -70,21 +70,7 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 initMap = () => {
-  self.newMap = L.map('map', {
-        center: [40.722216, -73.987501],
-        zoom: 12,
-        scrollWheelZoom: false
-      });
-
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: 'pk.eyJ1IjoiYWxiZXJ0b2JvbmZpZ2xpbyIsImEiOiJjanVsamJocXMyN29xM3lwNHpkNWt3OHpoIn0.Iuu6SZ8YMlT_yhF_1ChkeA',
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.streets'
-  }).addTo(newMap);
-
+  self.newMap = mapHelper();
   updateRestaurants();
 };
 
@@ -158,11 +144,21 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const el = document.createElement('div');
-
+/*
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   el.append(image);
+*/
+  
+  const figure = document.createElement('figure');
+  const image = document.createElement('picture');
+  figure.className = 'restaurant-img';
+  //image.className = 'restaurant-img';
+  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  figure.append(image);
+  el.append(figure);
+
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
