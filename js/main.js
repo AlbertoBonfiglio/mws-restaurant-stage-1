@@ -132,25 +132,31 @@ resetRestaurants = (restaurants) => {
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const el = document.getElementById('restaurants-list');
+  
   restaurants.forEach(restaurant => {
     el.append(createRestaurantHTML(restaurant));
   });
-  el.append(createFlexSpacer());
+
+  if (isOdd(restaurants.length)){
+    el.append(createFlexSpacer());
+  } else {
+    console.log('Skip');
+  }
+  
   addMarkersToMap();
 };
+
+function isOdd(num) { 
+  console.log(num % 2);
+  return num % 2;
+}
 
 /**
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
   const el = document.createElement('div');
-/*
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  el.append(image);
-*/
-  
+
   const picture = document.createElement('picture');
   const image = document.createElement('img');
     picture.className = 'restaurant-img';

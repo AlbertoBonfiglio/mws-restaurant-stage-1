@@ -23,23 +23,35 @@
     width: 100%;
 }
 
-/* hides the last child */
-#restaurants-list div:last-child {
+/* the display can have a 1, 2, or three column layout
+  the spacer is uded to keep the last items from expanding to full size 
+  if an odd number of items is retrieved. It is only inserted if the list 
+  of restaurants is odd. 
+  By default hides the spacer on single columns displays 
+*/
+#restaurants-list div.spacer {
   content: '';
+  display: none;
   visibility: hidden;
-  flex-grow: 1000000000;
-  max-height: 1px !important;
+  flex-grow: 1;
 }
+
 
 @media screen and (min-width: 568px){
   #restaurants-list div {
-    width: 50%;
+    width: 33%;
   }
+
+  /* Enables the spacer on multi columns displays */
+  #restaurants-list div.spacer {
+    display: flex;
+  }
+  
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 668px){
   #restaurants-list div {
-    width: 33.333%;
+    width: 33.3333%;
   }
 }
 
@@ -55,11 +67,6 @@
     margin-left: auto;
     margin-right: auto;
   }
-  
-  #restaurants-list div {
-    width: 25%;
-  }
-  
 }
 
 
