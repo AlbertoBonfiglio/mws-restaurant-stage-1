@@ -91,6 +91,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     picture.append(sourceMedium)
     
     image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
+    image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
+    
     picture.append(image);  
 
 

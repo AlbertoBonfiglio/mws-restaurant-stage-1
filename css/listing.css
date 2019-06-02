@@ -1,18 +1,25 @@
 /* ====================== Restaurant Listing ====================== */
+
+
 #restaurants-list {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: stretch;
-    width: 100%;
+    align-content: stretch;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
     background-color: #f3f3f3;
-    margin-left: auto;
-    margin-right: auto;
-    /* padding: 2rem 1rem 4rem;*/
+
     text-align: center;
   }
 
 #restaurants-list div {
-    flex-grow: 1;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: stretch;
     background-color: #fff;
     border: 2px solid #ccc;
     font-family: Arial,sans-serif;
@@ -20,20 +27,7 @@
     min-height: 380px;
     padding: 0 1rem 1rem;
     text-align: left;
-    width: 100%;
-}
-
-/* the display can have a 1, 2, or three column layout
-  the spacer is uded to keep the last items from expanding to full size 
-  if an odd number of items is retrieved. It is only inserted if the list 
-  of restaurants is odd. 
-  By default hides the spacer on single columns displays 
-*/
-#restaurants-list div.spacer {
-  content: '';
-  display: none;
-  visibility: hidden;
-  flex-grow: 1;
+    min-width: 330px;
 }
 
 
@@ -41,24 +35,18 @@
   #restaurants-list div {
     width: 33%;
   }
-
-  /* Enables the spacer on multi columns displays */
-  #restaurants-list div.spacer {
-    display: flex;
-  }
-  
 }
 
 @media screen and (min-width: 668px){
   #restaurants-list div {
     width: 33.3333%;
-  }
+  }  
 }
 
 @media screen and (min-width: 992px){
   #restaurants-list div {
     width: 25%;
-  }
+  }  
 }
 
 @media screen and (min-width: 1200px){

@@ -137,11 +137,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
     el.append(createRestaurantHTML(restaurant));
   });
 
-  if (isOdd(restaurants.length)){
-    el.append(createFlexSpacer());
-  } else {
-    console.log('Skip');
-  }
+ // el.append(createFlexSpacer());
   
   addMarkersToMap();
 };
@@ -172,7 +168,7 @@ createRestaurantHTML = (restaurant) => {
     picture.append(sourceMedium)
     
     image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
-  
+    image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
     picture.append(image);
   el.append(picture);
 
