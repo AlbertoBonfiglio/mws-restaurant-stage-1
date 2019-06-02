@@ -16,24 +16,14 @@ initMap = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {      
-      self.newMap = L.map('map', {
-        center: [restaurant.latlng.lat, restaurant.latlng.lng],
-        zoom: 16,
-        scrollWheelZoom: false
-      });
-      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-        mapboxToken: '<your MAPBOX API KEY HERE>',
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-          '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets'    
-      }).addTo(newMap);
+      self.newMap = mapHelper([restaurant.latlng.lat, restaurant.latlng.lng], 16);
+
       fillBreadcrumb();
+      
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
     }
   });
-}  
+};  
  
 /* window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
@@ -86,9 +76,25 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
-  const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  
+  const picture = document.getElementById('restaurant-img');
+  picture.className = 'restaurant-img';  
+    const image = document.createElement('img');
+    const sourceLarge = document.createElement('source');
+    sourceLarge.setAttribute('media', '(min-width: 750px)');
+    sourceLarge.setAttribute('srcset', DBHelper.imageUrlForRestaurantLarge(restaurant));
+    picture.append(sourceLarge)
+    
+    const sourceMedium = document.createElement('source');
+    sourceMedium.setAttribute('media', '(min-width: 500px)');
+    sourceMedium.setAttribute('srcset',  DBHelper.imageUrlForRestaurantMedium(restaurant));
+    picture.append(sourceMedium)
+    
+    image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
+    image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
+    
+    picture.append(image);  
+
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -99,7 +105,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   }
   // fill reviews
   fillReviewsHTML();
-}
+};
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.

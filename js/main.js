@@ -1,6 +1,6 @@
 let restaurants, neighborhoods, cuisines;
 var newMap;
-var markers = []
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -20,10 +20,10 @@ fetchNeighborhoods = () => {
       console.error(error);
     } else {
       self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
+      self.fillNeighborhoodsHTML();
     }
   });
-}
+};
 
 /**
  * Set neighborhoods HTML.
@@ -36,7 +36,7 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
     option.value = neighborhood;
     select.append(option);
   });
-}
+};
 
 /**
  * Fetch all cuisines and set their HTML.
@@ -50,7 +50,7 @@ fetchCuisines = () => {
       fillCuisinesHTML();
     }
   });
-}
+};
 
 /**
  * Set cuisines HTML.
@@ -64,26 +64,13 @@ fillCuisinesHTML = (cuisines = self.cuisines) => {
     option.value = cuisine;
     select.append(option);
   });
-}
+};
 
 /**
  * Initialize leaflet map, called from HTML.
  */
 initMap = () => {
-  self.newMap = L.map('map', {
-        center: [40.722216, -73.987501],
-        zoom: 12,
-        scrollWheelZoom: false
-      });
-  L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-    mapboxToken: 'pk.eyJ1IjoiYWxiZXJ0b2JvbmZpZ2xpbyIsImEiOiJjanVsamJocXMyN29xM3lwNHpkNWt3OHpoIn0.Iuu6SZ8YMlT_yhF_1ChkeA',
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox.streets'
-  }).addTo(newMap);
-
+  self.newMap = mapHelper();
   updateRestaurants();
 };
 
@@ -120,8 +107,8 @@ updateRestaurants = () => {
       resetRestaurants(restaurants);
       fillRestaurantsHTML();
     }
-  })
-}
+  });
+};
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
@@ -138,18 +125,26 @@ resetRestaurants = (restaurants) => {
   }
   self.markers = [];
   self.restaurants = restaurants;
-}
+};
 
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const el = document.getElementById('restaurants-list');
+  
   restaurants.forEach(restaurant => {
     el.append(createRestaurantHTML(restaurant));
   });
-  el.append(createFlexSpacer());
+
+ // el.append(createFlexSpacer());
+  
   addMarkersToMap();
+};
+
+function isOdd(num) { 
+  console.log(num % 2);
+  return num % 2;
 }
 
 /**
@@ -158,10 +153,25 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const el = document.createElement('div');
 
+  const picture = document.createElement('picture');
   const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  el.append(image);
+    picture.className = 'restaurant-img';
+    
+    const sourceLarge = document.createElement('source');
+    sourceLarge.setAttribute('media', '(min-width: 750px)');
+    sourceLarge.setAttribute('srcset', DBHelper.imageUrlForRestaurantLarge(restaurant));
+    picture.append(sourceLarge)
+    
+    const sourceMedium = document.createElement('source');
+    sourceMedium.setAttribute('media', '(min-width: 500px)');
+    sourceMedium.setAttribute('srcset',  DBHelper.imageUrlForRestaurantMedium(restaurant));
+    picture.append(sourceMedium)
+    
+    image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
+    image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
+    picture.append(image);
+  el.append(picture);
+
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
@@ -196,6 +206,7 @@ createFlexSpacer = () => {
   el.className = 'spacer';
   return el;
 };
+
 /**
  * Add markers for current restaurants to the map.
  */
@@ -210,7 +221,8 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 
-} 
+};
+
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
