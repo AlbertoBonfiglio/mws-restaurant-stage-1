@@ -7,6 +7,11 @@
             "label": "Compress Images",
             "type": "shell",
             "command": "grunt"
+        },
+        {
+            "type": "grunt",
+            "task": "responsive_images",
+            "problemMatcher": []
         }
     ]
 }

@@ -1,6 +1,6 @@
 let restaurants, neighborhoods, cuisines;
 var newMap;
-var markers = []
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -20,7 +20,7 @@ fetchNeighborhoods = () => {
       console.error(error);
     } else {
       self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
+      self.fillNeighborhoodsHTML();
     }
   });
 };
@@ -151,13 +151,24 @@ createRestaurantHTML = (restaurant) => {
   el.append(image);
 */
   
-  const figure = document.createElement('figure');
-  const image = document.createElement('picture');
-  figure.className = 'restaurant-img';
-  //image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  figure.append(image);
-  el.append(figure);
+  const picture = document.createElement('picture');
+  const image = document.createElement('img');
+    picture.className = 'restaurant-img';
+    
+    const sourceLarge = document.createElement('source');
+    sourceLarge.setAttribute('media', '(min-width: 750px)');
+    sourceLarge.setAttribute('srcset', DBHelper.imageUrlForRestaurantLarge(restaurant));
+    picture.append(sourceLarge)
+    
+    const sourceMedium = document.createElement('source');
+    sourceMedium.setAttribute('media', '(min-width: 500px)');
+    sourceMedium.setAttribute('srcset',  DBHelper.imageUrlForRestaurantMedium(restaurant));
+    picture.append(sourceMedium)
+    
+    image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
+  
+    picture.append(image);
+  el.append(picture);
 
 
   const name = document.createElement('h1');

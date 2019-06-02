@@ -80,6 +80,10 @@
   width: 100%;
 }
 
+#restaurant-img img {
+  width: 100%;
+}
+
 #restaurant-address {
   font-size: .8rem;
   margin: 10px 0px;

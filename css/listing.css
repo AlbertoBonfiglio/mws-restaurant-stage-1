@@ -63,7 +63,7 @@
 }
 
 
-  #restaurants-list .restaurant-img {
+  #restaurants-list picture.restaurant-img img {
     background-color: #ccc;
     display: block;
     margin: 0;

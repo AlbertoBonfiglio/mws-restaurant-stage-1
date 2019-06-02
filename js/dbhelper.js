@@ -150,9 +150,19 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    return (`/img/${imgName}-500_small.jpg`);
   }
 
+  static imageUrlForRestaurantLarge(restaurant) {
+    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    return (`/img/${imgName}-1980_large_3x.jpg 3x, /img/${imgName}-1600_large_2x.jpg 2x, /img/${imgName}-1000_large_1x.jpg 1x`);
+  }
+ 
+  static imageUrlForRestaurantMedium(restaurant) {
+    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    return (`/img/${imgName}-750_medium.jpg`);
+  }
   /**
    * Map marker for a restaurant.
    */
