@@ -136,16 +136,9 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     el.append(createRestaurantHTML(restaurant));
   });
-
- // el.append(createFlexSpacer());
-  
   addMarkersToMap();
 };
 
-function isOdd(num) { 
-  console.log(num % 2);
-  return num % 2;
-}
 
 /**
  * Create restaurant HTML.
@@ -173,7 +166,7 @@ createRestaurantHTML = (restaurant) => {
   el.append(picture);
 
 
-  const name = document.createElement('h1');
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   el.append(name);
 
@@ -188,6 +181,8 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
+  more.setAttribute('role', 'button');
+  more.setAttribute('aria-label', 'view details');
   el.append(more);
 
   return el;
