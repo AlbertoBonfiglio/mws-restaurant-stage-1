@@ -26,6 +26,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function (event) {
   console.log("SW activated");
+  db = initializeDb();
   event.waitUntil(
       caches.keys()
         .then(function(keys) {
@@ -74,17 +75,23 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-
+// https://itnext.io/indexeddb-your-second-step-towards-progressive-web-apps-pwa-dcbcd6cc2076
 
 const keyval = 'restaurants';
 const oldVersion = 1;
 const newVersion = 1;
 
-const db = openDB('rrw_db', 1, {
-  upgrade(db, oldVersion, newVersion) {
-    db.createObjectStore(keyval);
-  }
-});
+let db = initializeDb();
+
+function initializeDb(){
+  console.log('Database Initialization');
+  return openDB('rrw_db', 1, {
+    upgrade(db, oldVersion, newVersion) {
+      db.createObjectStore(keyval);
+    }
+  });
+  
+}
 
 function test(){
   db.then(db => {
@@ -99,4 +106,34 @@ function test(){
   })
   .catch(err => console.log(err));  
 
+}
+
+// https://developers.google.com/web/ilt/pwa/live-data-in-the-service-worker
+
+function getStoreData() { 
+  db.then(db => {
+    const store = db.transaction(keyval, 'readwrite').objectStore(keyval);
+    store.put('grosse', 'tette')
+      .then(
+          res => console.log(res)
+      )   
+      .catch(
+          error => console.error(error)
+      );
+  })
+  .catch(err => console.log(err));  
+}
+
+function putDataInStore() {
+  db.then(db => {
+    const store = db.transaction(keyval, 'readwrite').objectStore(keyval);
+    store.put('grosse', 'tette')
+      .then(
+          res => console.log(res)
+      )   
+      .catch(
+          error => console.error(error)
+      );
+  })
+  .catch(err => console.log(err));  
 }

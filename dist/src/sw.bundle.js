@@ -275,6 +275,7 @@ self.addEventListener('install', function (event) {
 });
 self.addEventListener('activate', function (event) {
   console.log("SW activated");
+  db = initializeDb();
   event.waitUntil(caches.keys().then(function (keys) {
     return Promise.all(keys.map(function (key, i) {
       if (key !== CACHE_VERSION) {
@@ -310,15 +311,21 @@ self.addEventListener('fetch', function (event) {
       return response;
     });
   }));
-});
+}); // https://itnext.io/indexeddb-your-second-step-towards-progressive-web-apps-pwa-dcbcd6cc2076
+
 var keyval = 'restaurants';
 var oldVersion = 1;
 var newVersion = 1;
-var db = (0, _idb.openDB)('rrw_db', 1, {
-  upgrade: function upgrade(db, oldVersion, newVersion) {
-    db.createObjectStore(keyval);
-  }
-});
+var db = initializeDb();
+
+function initializeDb() {
+  console.log('Database Initialization');
+  return (0, _idb.openDB)('rrw_db', 1, {
+    upgrade: function upgrade(db, oldVersion, newVersion) {
+      db.createObjectStore(keyval);
+    }
+  });
+}
 
 function test() {
   db.then(function (db) {
