@@ -8,45 +8,51 @@ class DBHelper {
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    return `${window.location.protocol}//${window.location.host}/data/restaurants.json`;
+    //return `${window.location.protocol}//${window.location.host}/data/restaurants.json`;
+    return `${window.location.protocol}//${window.location.hostname}:1337/restaurants`;
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
+    fetch(DBHelper.DATABASE_URL) // Call the fetch function passing the url of the API as a parameter
+    .then((resp) => resp.json())
+    .then(function(response) {
+        const restaurants = response;
         callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
+    })
+    .catch(function(err) {
+        // This is where you run code if the server returns any errors
+        console.log(err);
+        const error = (`Request failed. ${err}`);
         callback(error, null);
-      }
-    };
-    xhr.send();
+    });
+
   }
 
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
-        }
+    const url = `${DBHelper.DATABASE_URL}/${id}`;
+    fetch(url) 
+    .then((res) => {
+      if (res.status !== 200) {
+        throw(res.statusText);
       }
+      return res.json();
+    })
+    .then(function(json) {
+        const restaurant = json;
+        callback(null, restaurant);
+    })
+    .catch(function(err) {
+        // This is where you run code if the server returns any errors
+        const error = (`Request failed. ${err}`);
+        callback(error, null);
     });
+
   }
 
   /**
@@ -149,17 +155,18 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    //const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    const imgName = restaurant.photograph;
     return (`/img/${imgName}-500_small.jpg`);
   }
 
   static imageUrlForRestaurantLarge(restaurant) {
-    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    const imgName = restaurant.photograph; //.substr(0, restaurant.photograph.length - 4);
     return (`/img/${imgName}-1980_large_3x.jpg 3x, /img/${imgName}-1600_large_2x.jpg 2x, /img/${imgName}-1000_large_1x.jpg 1x`);
   }
  
   static imageUrlForRestaurantMedium(restaurant) {
-    const imgName = restaurant.photograph.substr(0, restaurant.photograph.length - 4);
+    const imgName = restaurant.photograph; //.substr(0, restaurant.photograph.length - 4);
     return (`/img/${imgName}-750_medium.jpg`);
   }
   /**

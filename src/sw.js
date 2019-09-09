@@ -1,3 +1,5 @@
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
+
 const CACHE_VERSION = 'app-v3';
 const cachedURLS = [
   '/index.html',
@@ -6,11 +8,12 @@ const cachedURLS = [
   '/css/',
   '/img/',
   '/js/',
-  'sw.js'
+  'sw.bundle.js'
 ];
 
 self.addEventListener('install', function(event) {
     console.log("SW installing");
+    test();
     event.waitUntil(
       caches.open(CACHE_VERSION)
         .then(function(cache) {
@@ -24,19 +27,20 @@ self.addEventListener('install', function(event) {
 self.addEventListener('activate', function (event) {
   console.log("SW activated");
   event.waitUntil(
-      caches.keys().then(function(keys){
-          return Promise.all(keys.map(function(key, i){
+      caches.keys()
+        .then(function(keys) {
+          return Promise
+            .all(keys.map(function(key, i) {
               if(key !== CACHE_VERSION){
                   console.log('Deleting cache: ', keys[i]); 
                   return caches.delete(keys[i]);
-              }
-          }))
-      })
-  )
+              }}
+            ))}));
 });
 
 self.addEventListener('fetch', function(event) {
   console.log("SW fetch detected");
+  test();
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
@@ -72,18 +76,27 @@ self.addEventListener('fetch', function(event) {
 
 
 
+const keyval = 'restaurants';
+const oldVersion = 1;
+const newVersion = 1;
 
-/*
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request).then(function(resp) {
-      return resp || fetch(event.request).then(function(response) {
-        return caches.open('v1').then(function(cache) {
-          cache.put(event.request, response.clone());
-          return response;
-        });  
-      });
-    })
-  );
+const db = openDB('rrw_db', 1, {
+  upgrade(db, oldVersion, newVersion) {
+    db.createObjectStore(keyval);
+  }
 });
-*/
+
+function test(){
+  db.then(db => {
+    const store = db.transaction(keyval, 'readwrite').objectStore(keyval);
+    store.put('grosse', 'tette')
+      .then(
+          res => console.log(res)
+      )   
+      .catch(
+          error => console.error(error)
+      );
+  })
+  .catch(err => console.log(err));  
+
+}

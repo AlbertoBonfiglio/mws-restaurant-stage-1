@@ -1,5 +1,6 @@
+
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', {scope: '/'})
+    navigator.serviceWorker.register('/sw.bundle.js', {scope: '/'})
     .then(function(reg) {
       // registration worked
       console.log('Registration succeeded. Scope is ' + reg.scope);

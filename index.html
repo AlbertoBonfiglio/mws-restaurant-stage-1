@@ -3,9 +3,12 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1" >
+  <meta name="theme-color" content="#317EFB">
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icons/touch-icon-iphone.png">
   <title>Restaurant Reviews</title>
 </head>
 
@@ -24,12 +27,12 @@
     <section>
       <div class="filter-options" role="form">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" 
+        <select id="neighborhoods-select" name="neighborhoods" aria-label="select neighborhoods"
           onchange="updateRestaurants()"
           >
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="select cuisine">
           <option value="all">All Cuisines</option>
         </select>
       </div>

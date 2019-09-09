@@ -1,21 +1,43 @@
 {
   "name": "RestaurantReviews",
   "version": "0.1.0",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/udacity/responsive-images.git"
   },
+  "keywords": [
+    "es6"
+  ],
+  "scripts": {
+    "build": "gulp build"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
+    "event-stream": "^4.0.1",
+    "glob": "^7.1.4",
     "grunt": "^1.0.4",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-copy": "~0.8.0",
     "grunt-contrib-jshint": "^2.1.0",
     "grunt-contrib-nodeunit": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.1",
-    "grunt-mkdir": "~0.1.2"
+    "grunt-mkdir": "~0.1.2",
+    "gulp": "^4.0.2",
+    "gulp-rename": "^1.4.0",
+    "vinyl-source-stream": "^2.0.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8",
+    "grunt-responsive-images": "^1.10.1"
   },
   "dependencies": {
-    "grunt-responsive-images": "^1.10.1",
+    "idb": "^4.0.4",
     "loader": "^2.1.1"
   }
 }
