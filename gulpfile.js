@@ -5,13 +5,14 @@ var gulp       = require('gulp'),
     rename     = require('gulp-rename'),
     browserify = require('browserify'),
     glob       = require('glob'),
-    es         = require('event-stream');
+    es         = require('event-stream'),
+    workboxBuild = require('workbox-build');
 
     const webpack = require('webpack')
     const webpackConfig = require('./webpack.config.js')
 
 gulp.task('compile', function(done) {
-    glob('./src/**.js', function(err, files) {
+    glob('./build/**.js', function(err, files) {
         if(err) done(err);
 
         var tasks = files.map(function(entry) {
@@ -29,6 +30,12 @@ gulp.task('compile', function(done) {
     })
 });
 
+gulp.task('move',['clean'], function(){
+    // the base option sets the relative root for the set of files,
+    // preserving the folder structure
+    gulp.src('/src/*.js', { base: './' })
+    .pipe(gulp.dest('build'));
+});
 
 function moveSw() {
 return new Promise((resolve, reject) => {
@@ -43,5 +50,28 @@ return new Promise((resolve, reject) => {
     })
 })
 }
+
+const buildSw = () => {
+    return workboxBuild.injectManifest({
+      swSrc: 'src/sw.js',
+      swDest: 'build/sw.js',
+      globDirectory: './',
+      globIgnores: [
+          'node_modules/**/*', 
+          'dist/**/*',
+          '*.config.js', 
+          '*.js', 
+          '*.*.js'],
+      globPatterns: [
+        '**/*.{js,css,html}'
+      ]
+    }).then(resources => {
+      console.log(`Injected ${resources.count} resources for precaching, ` +
+          `totaling ${resources.size} bytes.`);
+    }).catch(err => {
+      console.log('Uh oh 😬', err);
+    });
+  }
+  gulp.task('build-sw', buildSw);
 
 exports.build = gulp.series('compile', moveSw)

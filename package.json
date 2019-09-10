@@ -29,12 +29,13 @@
     "grunt-contrib-nodeunit": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.1",
     "grunt-mkdir": "~0.1.2",
+    "grunt-responsive-images": "^1.10.1",
     "gulp": "^4.0.2",
     "gulp-rename": "^1.4.0",
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
-    "grunt-responsive-images": "^1.10.1"
+    "workbox-build": "^4.3.1"
   },
   "dependencies": {
     "idb": "^4.0.4",
