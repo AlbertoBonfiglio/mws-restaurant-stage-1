@@ -43,5 +43,5 @@ return new Promise((resolve, reject) => {
     })
 })
 }
-  
+
 exports.build = gulp.series('compile', moveSw)
