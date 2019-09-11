@@ -31,6 +31,7 @@
     "grunt-mkdir": "~0.1.2",
     "grunt-responsive-images": "^1.10.1",
     "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
     "gulp-rename": "^1.4.0",
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^4.39.3",
