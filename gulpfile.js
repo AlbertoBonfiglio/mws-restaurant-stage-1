@@ -9,8 +9,6 @@ var gulp         = require('gulp'),
     workboxBuild = require('workbox-build'),
     clean        = require('gulp-clean');;
 
-    const webpack = require('webpack')
-    const webpackConfig = require('./webpack.config.js')
 
 gulp.task('clean', function(){
     return gulp.src(['dist/*'], {read:false})
@@ -60,21 +58,6 @@ gulp.task('compileSw', function()  {
         .pipe(rename({extname: '.bundle.js'}))
         .pipe(gulp.dest('./dist'));
 });
-
-
-function moveSw() {
-return new Promise((resolve, reject) => {
-    webpack(webpackConfig, (err, stats) => {
-        if (err) {
-            return reject(err)
-        }
-        if (stats.hasErrors()) {
-            return reject(new Error(stats.compilation.errors.join('\n')))
-        }
-        resolve()
-    })
-})
-}
 
 const buildSw = () => {
     return workboxBuild.injectManifest({

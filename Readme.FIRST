@@ -1,0 +1,2 @@
+To build the project run gulp build. 
+This will build the project and create the dist forder with all the required assets
