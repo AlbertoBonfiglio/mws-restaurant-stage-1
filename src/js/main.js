@@ -74,19 +74,6 @@ initMap = () => {
   updateRestaurants();
 };
 
-/* window.initMap = () => {
-  let loc = {
-    lat: 40.722216,
-    lng: -73.987501
-  };
-  self.map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: loc,
-    scrollwheel: false
-  });
-  updateRestaurants();
-} */
-
 /**
  * Update page and map for current restaurants.
  */
@@ -145,7 +132,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const el = document.createElement('div');
-
+  el.setAttribute('class', 'restaurant-container')
   const picture = document.createElement('picture');
   const image = document.createElement('img');
     picture.className = 'restaurant-img';
@@ -153,12 +140,12 @@ createRestaurantHTML = (restaurant) => {
     const sourceLarge = document.createElement('source');
     sourceLarge.setAttribute('media', '(min-width: 750px)');
     sourceLarge.setAttribute('srcset', DBHelper.imageUrlForRestaurantLarge(restaurant));
-    picture.append(sourceLarge)
+    picture.append(sourceLarge);
     
     const sourceMedium = document.createElement('source');
     sourceMedium.setAttribute('media', '(min-width: 500px)');
     sourceMedium.setAttribute('srcset',  DBHelper.imageUrlForRestaurantMedium(restaurant));
-    picture.append(sourceMedium)
+    picture.append(sourceMedium);
     
     image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
     image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
@@ -177,16 +164,75 @@ createRestaurantHTML = (restaurant) => {
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
   el.append(address);
+  
+  // creates an actionbar to store the detail button and the favourite toggle
+  const actionbar = document.createElement('div');
+  actionbar.setAttribute('class', 'actionbar');
+    const favourite = document.createElement('div');
+    favourite.onclick = function(){ toggleFavourite(event, restaurant); };
+    favourite.setAttribute('class', 'checkbox');
+      const heart = createHeartSVG(restaurant.id, restaurant.is_favorite);
+      heart.onclick = function(){ toggleFavourite(event, restaurant); };
+    favourite.append(heart)  ;
+  actionbar.append(favourite);
+  
+    //wraps the details button in a div
+    const buttonDiv = document.createElement('div');
+    buttonDiv.setAttribute('class', 'details');
+      const more = document.createElement('a');
+      more.innerHTML = 'View Details';
+      more.href = DBHelper.urlForRestaurant(restaurant);
+      more.setAttribute('role', 'button');
+      more.setAttribute('aria-label', 'view details');
+    buttonDiv.append(more);
+  actionbar.append(buttonDiv);
 
-  const more = document.createElement('a');
-  more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
-  more.setAttribute('role', 'button');
-  more.setAttribute('aria-label', 'view details');
-  el.append(more);
+  el.append(actionbar);
 
   return el;
 };
+
+/** 
+ * Toggle Favourite Restaurant 
+ */
+toggleFavourite = (event, restaurant) => {
+  event.stopPropagation();
+  restaurant.is_favorite = !restaurant.is_favorite;
+  
+  DBHelper.updateRestaurant((error, restaurant) => {
+    if (error) { // Got an error
+      console.error(error);
+    } else {
+      let _hrt = document.getElementById(`favourite-hrt-path-${restaurant.id}`);
+      _hrt.style.fill = restaurant.is_favorite ? 'orange': 'grey';
+    }
+  }, restaurant);
+ 
+};
+
+/** Create the Heart SVG
+ * 
+ */
+createHeartSVG = (id, status) => {
+  let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute('id', `favourite-hrt-${id}`);
+  svg.setAttribute('alt', `Mark as favourite restaurant`);
+  svg.setAttribute('aria-label', `Mark as favourite restaurant`);
+  svg.setAttribute("aria-hidden","true");
+  svg.setAttribute('viewbox', '0 0 24 24');
+  svg.setAttribute('width', '24px');
+  svg.setAttribute('height', '24px');
+
+  let path1 = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+  path1.setAttribute('id', `favourite-hrt-path-${id}`);
+  path1.setAttribute('d', 'M12 4.419c-2.826-5.695-11.999-4.064-11.999 3.27 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-7.327-9.17-8.972-12-3.27z');
+  //path1.setAttribute('fill', status ? 'orange': 'grey');
+  path1.setAttribute('style', `fill: ${status ? 'orange': 'grey'}`);
+  
+  svg.appendChild(path1);
+  return svg;
+};
+
 
 /** 
  * Flex has issues with the last item when growth is set to 1

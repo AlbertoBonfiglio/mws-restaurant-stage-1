@@ -154,6 +154,25 @@ class DBHelper {
   }
 
   /**
+   * 
+   * @param {*} restaurant 
+   */
+  static updateRestaurant(callback, restaurant) {
+      fetch(`${DBHelper.DATABASE_URL}/${restaurant.id}`, {
+        method: 'put',
+        body: JSON.stringify(restaurant)
+      })
+      .then(function(response) { return response.json();})
+      .then(function(data) { callback(null, data); })
+      .catch(function(err) {
+        // This is where you run code if the server returns any errors
+        console.log(err);
+        const error = (`Request failed. ${err}`);
+        callback(error, null);
+    });  
+  };
+
+  /**
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
@@ -184,16 +203,7 @@ class DBHelper {
       marker.addTo(newMap);
     return marker;
   } 
-  /* static mapMarkerForRestaurant(restaurant, map) {
-    const marker = new google.maps.Marker({
-      position: restaurant.latlng,
-      title: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant),
-      map: map,
-      animation: google.maps.Animation.DROP}
-    );
-    return marker;
-  } */
+  
 
 }
 

@@ -7,7 +7,7 @@ var gulp         = require('gulp'),
     glob         = require('glob'),
     es           = require('event-stream'),
     workboxBuild = require('workbox-build'),
-    clean        = require('gulp-clean');;
+    clean        = require('gulp-clean');
 
 
 gulp.task('clean', function(){
@@ -29,27 +29,6 @@ gulp.task('moveAssets', function(done){
     done();
 });
     
-// Not used
-gulp.task('compile', function(done) {
-    glob('./src/**.pre.js', function(err, files) {
-        if(err) done(err);
-
-        var tasks = files.map(function(entry) {
-            console.log(entry);
-            return browserify({ entries: [entry] } )
-                .transform('babelify', {presets: ["@babel/preset-env"]})
-                .bundle()
-                .pipe(source(entry))
-                .pipe(rename({
-                    extname: '.bundle.js'
-                }))
-                .pipe(gulp.dest('./dist' ));
-            });
-         
-        es.merge(tasks).on('end', done);
-    })
-});
-
 gulp.task('compileSw', function()  {
     return browserify('./src/sw.pre.js' )
         .transform('babelify', {presets: ["@babel/preset-env"]})
@@ -80,6 +59,19 @@ const buildSw = () => {
       console.log('Uh oh 😬', err);
     });
   }
+
 gulp.task('build-sw', buildSw);
 
-exports.build = gulp.series('clean', 'moveAssets', 'build-sw',  'compileSw')
+var buildSeries =  gulp.series(['clean', 'moveAssets', 'build-sw',  'compileSw']);
+
+gulp.task('default', function() {
+    gulp.watch('./src/sw.js', buildSeries);
+    gulp.watch('./src/js/**/*.js', buildSeries);
+    gulp.watch('./src/**/*.css', buildSeries);
+    gulp.watch('./src/**/*.html', buildSeries);
+});
+
+
+
+exports.build = buildSeries;
+ 

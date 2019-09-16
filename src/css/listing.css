@@ -15,7 +15,7 @@
     text-align: center;
   }
 
-#restaurants-list div {
+#restaurants-list div.restaurant-container {
     flex-grow: 0;
     flex-shrink: 1;
     flex-basis: auto;
@@ -32,19 +32,19 @@
 
 
 @media screen and (min-width: 568px){
-  #restaurants-list div {
+  #restaurants-list div.restaurant-container {
     width: 33%;
   }
 }
 
 @media screen and (min-width: 668px){
-  #restaurants-list div {
+  #restaurants-list div.restaurant-container {
     width: 33.3333%;
   }  
 }
 
 @media screen and (min-width: 992px){
-  #restaurants-list div {
+  #restaurants-list div.restaurant-container {
     width: 25%;
   }  
 }
@@ -86,13 +86,39 @@
   
   #restaurants-list div a {
     background-color: #252831;
-    border-bottom: 3px solid #eee;
+    /* border-bottom: 3px solid #eee; */
     color: #fff;
     display: inline-block;
     font-size: 10pt;
-    margin: 15px 0 0;
+    /* margin: 15px 0 0; */
     padding: 8px 30px 10px;
-    text-align: center;
+    width: auto !important;
+    height: auto !important;
+    min-height: auto;
     text-decoration: none;
     text-transform: uppercase;
   }
+
+  #restaurants-list div.actionbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: .75rem; 
+    border-style: solid;
+    border-width: 0px;
+  }
+
+  div.actionbar div.details {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: right;
+    text-align: right;
+  }
+
+  div.actionbar  div.checkbox{ 
+    flex-grow: 1;
+    justify-content: left;
+    padding: .35rem .25rem .25rem;
+  }
+
+
