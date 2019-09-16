@@ -11,7 +11,10 @@ class DBHelper {
     //return `${window.location.protocol}//${window.location.host}/data/restaurants.json`;
     return `${window.location.protocol}//${window.location.hostname}:1337/restaurants`;
   }
-
+  static get DATABASE_REVIEW_URL() {
+    //return `${window.location.protocol}//${window.location.host}/data/restaurants.json`;
+    return `${window.location.protocol}//${window.location.hostname}:1337/reviews`;
+  }
   /**
    * Fetch all restaurants.
    */
@@ -48,6 +51,27 @@ class DBHelper {
     .then(function(json) {
         const restaurant = json;
         callback(null, restaurant);
+    })
+    .catch(function(err) {
+        // This is where you run code if the server returns any errors
+        const error = (`Request failed. ${err}`);
+        callback(error, null);
+    });
+  }
+
+  static fetchRestaurantReviewsById(id, callback) {
+    const url = `${DBHelper.DATABASE_REVIEW_URL}/?restaurant_id=${id}`;
+    console.log('fetchRestaurantReviewsById called', url);
+    fetch(url) 
+    .then((res) => {
+      if (res.status !== 200) {
+        throw(res.statusText);
+      }
+      return res.json();
+    })
+    .then(function(json) {
+        console.log('returning reviews');
+        callback(null, json);
     })
     .catch(function(err) {
         // This is where you run code if the server returns any errors

@@ -1,4 +1,5 @@
 let restaurant;
+
 var newMap;
 
 /**
@@ -25,33 +26,18 @@ initMap = () => {
   });
 };  
  
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-      fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-    }
-  });
-} */
 
 /**
  * Get current restaurant from page URL.
  */
 fetchRestaurantFromURL = (callback) => {
   if (self.restaurant) { // restaurant already fetched!
-    callback(null, self.restaurant)
+    callback(null, self.restaurant);
     return;
   }
   const id = getParameterByName('id');
   if (!id) { // no id found in URL
-    error = 'No restaurant id in URL'
+    error = 'No restaurant id in URL';
     callback(error, null);
   } else {
     DBHelper.fetchRestaurantById(id, (error, restaurant) => {
@@ -60,8 +46,23 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
-      fillRestaurantHTML();
-      callback(null, restaurant)
+      console.log('looking for reviews');
+      // gets the reviews if any
+      DBHelper.fetchRestaurantReviewsById(id, (error, reviews) => {
+        self.restaurant.reviews = reviews;
+        // console.log('Reviews found: ', self.restaurant.reviews, reviews);
+        if (!reviews) {
+          console.log('NO reviews found');
+        }
+        if (error) {
+          console.error(error);
+          return;
+        }
+
+        fillRestaurantHTML();
+        callback(null, restaurant);
+      });
+
     });
   }
 }
@@ -131,6 +132,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+  console.log('fillReviewsHTML --> ',reviews, self.restaurant.reviews)
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
@@ -159,7 +161,7 @@ createReviewHTML = (review) => {
   li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.updatedAt);
   li.appendChild(date);
 
   const rating = document.createElement('p');

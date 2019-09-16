@@ -55,7 +55,7 @@ const matchPage = ({url, event }) => {
   return matches;
 }
 
-// Caches api calls
+// Caches Pages calls
 workbox.routing.registerRoute(
   matchPage,
   new workbox.strategies.CacheFirst({
