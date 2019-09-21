@@ -59,6 +59,38 @@
     Copyright (c) 2017 <a href="/"><strong> Restaurant Reviews </strong></a> All Rights Reserved.
   </footer>
 
+<!--Modal -->
+<div id="reviews-modal" class="modal">
+  <form class="modal-content animate" action="/action_page.php" method="post">
+    <div class="imgcontainer">
+      <span onclick="closeModal()" class="close" title="Close Modal">&times;</span>
+      <img src="assets/restaurant_icon_png.png" alt="logo" class="avatar">
+    </div>
+
+    <div class="container">
+      <label for="name"><b>Name</b></label>
+      <input type="text" placeholder="Enter your name" name="name" required>
+
+      <label for="datePicker"><b>Visit Date</b></label>
+      <input id="datePicker" type="date" placeholder="Visit Date" name="datePicker" required>
+
+      <label for="rating"><b>Rating</b></label>
+      <meter name="rating" min="0" max="5" required value=4></meter>
+
+      <label for="review"><b>Review</b></label>
+      <textarea placeholder="Enter your review" name="review" 
+        rows="5" cols="40" required></textarea>
+
+    </div>
+
+    <div class="actionbar" style="background-color:#f1f1f1">
+      <button type="button" onclick="closeModal()" class="cancelbtn">Cancel</button>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+</div>
+
+
 <!-- End footer
   <script type="application/javascript" charset="utf-8" src="js/bootstrap.js"></script> 
    -->

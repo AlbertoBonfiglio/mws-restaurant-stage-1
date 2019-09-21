@@ -134,9 +134,29 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   console.log('fillReviewsHTML --> ',reviews, self.restaurant.reviews)
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h3');
-  title.innerHTML = 'Reviews';
-  container.appendChild(title);
+
+  const header = document.createElement('div');
+  header.setAttribute('class', 'header');
+    const title = document.createElement('div');
+    title.setAttribute('class', 'title');
+      const h3 = document.createElement('h3');
+      h3.innerHTML = 'Reviews';
+    title.appendChild(h3);
+    header.appendChild(title);
+
+    const button = document.createElement('div');
+      button.setAttribute('class', 'details');
+        const btn = document.createElement('a');
+        btn.innerHTML = 'Add Review';
+        //btn.href = DBHelper.urlForRestaurant(restaurant);
+        btn.setAttribute('role', 'button');
+        btn.setAttribute('aria-label', 'view details');
+        btn.onclick = function() { showModal(); };
+      button.appendChild(btn);
+  
+    header.appendChild(button);
+      
+  container.appendChild(header);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -149,7 +169,33 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
-}
+};
+
+showModal = () => {
+  let date = document.getElementById('datePicker');
+  date.value = new Date().toDateInputValue();
+  date.max = date.value;
+  date.min = '2000-1-1';
+  let modal = document.getElementById('reviews-modal');
+  console.log(modal);
+  modal.style.display = 'block';
+};
+
+
+closeModal = () => {
+  let modal = document.getElementById('reviews-modal');
+  console.log(modal);
+  modal.style.display = 'none';
+};
+
+
+// for correct timezone support:
+Date.prototype.toDateInputValue = (function() {
+    var local = new Date(this);
+    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+    return local.toJSON().slice(0,10);
+});
+
 
 /**
  * Create review HTML and add it to the webpage.
@@ -173,7 +219,7 @@ createReviewHTML = (review) => {
   li.appendChild(comments);
 
   return li;
-}
+};
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
