@@ -196,6 +196,27 @@ class DBHelper {
     });  
   };
 
+
+    /**
+   * 
+   * @param {*} review 
+   */
+  static addRestaurantReview(review, callback ) {
+    fetch(`${DBHelper.DATABASE_REVIEW_URL}`, {
+      method: 'post',
+      body: review
+    })
+    .then(function(response) { return response.json();})
+    .then(function(data) { callback(null, data); })
+    .catch(function(err) {
+      // This is where you run code if the server returns any errors
+      console.log(err);
+      const error = (`Request failed. ${err}`);
+      callback(error, null);
+  });  
+};
+
+
   /**
    * Restaurant image URL.
    */

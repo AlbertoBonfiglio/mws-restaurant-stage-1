@@ -132,9 +132,8 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  * Create all reviews HTML and add them to the webpage.
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
-  console.log('fillReviewsHTML --> ',reviews, self.restaurant.reviews)
   const container = document.getElementById('reviews-container');
-
+  // now repopulate
   const header = document.createElement('div');
   header.setAttribute('class', 'header');
     const title = document.createElement('div');
@@ -148,7 +147,6 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
       button.setAttribute('class', 'details');
         const btn = document.createElement('a');
         btn.innerHTML = 'Add Review';
-        //btn.href = DBHelper.urlForRestaurant(restaurant);
         btn.setAttribute('role', 'button');
         btn.setAttribute('aria-label', 'view details');
         btn.onclick = function() { showModal(); };
@@ -172,10 +170,9 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 };
 
 showModal = () => {
-  let date = document.getElementById('datePicker');
-  date.value = new Date().toDateInputValue();
-  date.max = date.value;
-  date.min = '2000-1-1';
+  let rest = document.getElementById('restaurant_id');
+  rest.value = self.restaurant.id;
+
   let modal = document.getElementById('reviews-modal');
   console.log(modal);
   modal.style.display = 'block';
@@ -188,13 +185,27 @@ closeModal = () => {
   modal.style.display = 'none';
 };
 
+submitModal= (event, form ) => {
+  event.preventDefault();
+  let formData = new FormData(document.getElementById('modal-form'));
+  let review = {};
+  formData.forEach((value, key) => {review[key] = value;});
+  
+  DBHelper.addRestaurantReview(JSON.stringify(review), (error, data) => {
+    if (error) { // Got an error
+      console.error(error);
+      window.alert('Unable to append review. Try again later.');
+    }
+    if (data){
+      closeModal();
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(data));
+    }});
+  };
 
-// for correct timezone support:
-Date.prototype.toDateInputValue = (function() {
-    var local = new Date(this);
-    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-    return local.toJSON().slice(0,10);
-});
+
+
+
 
 
 /**
