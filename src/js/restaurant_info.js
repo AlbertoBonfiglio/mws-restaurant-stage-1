@@ -196,11 +196,15 @@ submitModal= (event, form ) => {
   let formData = new FormData(document.getElementById('modal-form'));
   let review = {};
   formData.forEach((value, key) => {review[key] = value;});
+  review.updatedAt = Date.now();
+  review.createdAt = Date.now();
   
   DBHelper.addRestaurantReview(JSON.stringify(review), (error, data) => {
     if (error) { // Got an error
       console.error(error);
       window.alert('You appear to be offline. Your review will be submitted as soon as you are back online.');
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(review));
       closeModal();
     }
     if (data){
