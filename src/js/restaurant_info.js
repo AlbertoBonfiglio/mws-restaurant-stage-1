@@ -170,10 +170,21 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 showModal = () => {
   let rest = document.getElementById('restaurant_id');
   rest.value = self.restaurant.id;
+  clearModal(); 
   let modal = document.getElementById('reviews-modal');
   modal.style.display = 'block';
 };
 
+clearModal = () => {
+  const validInputs = ['text', 'textarea'];
+  var f = document.forms['modal-form'].elements;
+  
+  for (var i = 0; i < f.length; i++) {
+    if (validInputs.includes(f[i].type)) { // only checks the needed inputs
+      f[i].value = '';
+    }
+  }
+};
 
 closeModal = () => {
   let modal = document.getElementById('reviews-modal');
@@ -196,6 +207,7 @@ submitModal= (event, form ) => {
       closeModal();
       const ul = document.getElementById('reviews-list');
       ul.appendChild(createReviewHTML(data));
+      window.alert('Thanks for the review!.');
     }});
   };
 
@@ -213,7 +225,6 @@ submitModal= (event, form ) => {
         }
       }
     }
-    console.log('cansubmit ', cansubmit);
     document.getElementById('button_submit').disabled = !cansubmit;
   };
 
