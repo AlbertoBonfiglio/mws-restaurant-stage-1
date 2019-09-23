@@ -63,7 +63,7 @@ fetchRestaurantFromURL = (callback) => {
 
     });
   }
-}
+};
 
 /**
  * Create restaurant HTML and add it to the webpage
@@ -82,12 +82,12 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     const sourceLarge = document.createElement('source');
     sourceLarge.setAttribute('media', '(min-width: 750px)');
     sourceLarge.setAttribute('srcset', DBHelper.imageUrlForRestaurantLarge(restaurant));
-    picture.append(sourceLarge)
+    picture.append(sourceLarge);
     
     const sourceMedium = document.createElement('source');
     sourceMedium.setAttribute('media', '(min-width: 500px)');
     sourceMedium.setAttribute('srcset',  DBHelper.imageUrlForRestaurantMedium(restaurant));
-    picture.append(sourceMedium)
+    picture.append(sourceMedium);
     
     image.src = DBHelper.imageUrlForRestaurant(restaurant); //default
     image.setAttribute('alt', `${restaurant.name}'s ${restaurant.photographAlt} `);
@@ -124,7 +124,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
     hours.appendChild(row);
   }
-}
+};
 
 /**
  * Create all reviews HTML and add them to the webpage.
@@ -264,7 +264,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const li = document.createElement('li');
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
-}
+};
 
 /**
  * Get a parameter by name from page URL.
@@ -280,4 +280,4 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+};
