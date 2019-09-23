@@ -46,11 +46,9 @@ fetchRestaurantFromURL = (callback) => {
         console.error(error);
         return;
       }
-      console.log('looking for reviews');
       // gets the reviews if any
       DBHelper.fetchRestaurantReviewsById(id, (error, reviews) => {
         self.restaurant.reviews = reviews;
-        // console.log('Reviews found: ', self.restaurant.reviews, reviews);
         if (!reviews) {
           console.log('NO reviews found');
         }
@@ -172,16 +170,13 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 showModal = () => {
   let rest = document.getElementById('restaurant_id');
   rest.value = self.restaurant.id;
-
   let modal = document.getElementById('reviews-modal');
-  console.log(modal);
   modal.style.display = 'block';
 };
 
 
 closeModal = () => {
   let modal = document.getElementById('reviews-modal');
-  console.log(modal);
   modal.style.display = 'none';
 };
 
@@ -194,7 +189,8 @@ submitModal= (event, form ) => {
   DBHelper.addRestaurantReview(JSON.stringify(review), (error, data) => {
     if (error) { // Got an error
       console.error(error);
-      window.alert('Unable to append review. Try again later.');
+      window.alert('You appear to be offline. Your review will be submitted as soon as you are back online.');
+      closeModal();
     }
     if (data){
       closeModal();
@@ -204,9 +200,22 @@ submitModal= (event, form ) => {
   };
 
 
+  checkform = () => {
+    var validInputs = ['text', 'textarea'];
+    var f = document.forms['modal-form'].elements;
+    var cansubmit = true;
 
-
-
+    for (var i = 0; i < f.length; i++) {
+      if (validInputs.includes(f[i].type)) { // only checks the needed inputs
+        if (f[i].value.length === 0) {
+          cansubmit = false;
+          break;
+        }
+      }
+    }
+    console.log('cansubmit ', cansubmit);
+    document.getElementById('button_submit').disabled = !cansubmit;
+  };
 
 /**
  * Create review HTML and add it to the webpage.

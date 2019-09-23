@@ -19,7 +19,6 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    console.log('fetchRestaurants called', DBHelper.DATABASE_URL);
     fetch(DBHelper.DATABASE_URL) // Call the fetch function passing the url of the API as a parameter
     .then((resp) => resp.json())
     .then(function(response) {
@@ -40,7 +39,6 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     const url = `${DBHelper.DATABASE_URL}/${id}`;
-    console.log('fetchRestaurantbyId called', url);
     fetch(url) 
     .then((res) => {
       if (res.status !== 200) {
@@ -61,7 +59,6 @@ class DBHelper {
 
   static fetchRestaurantReviewsById(id, callback) {
     const url = `${DBHelper.DATABASE_REVIEW_URL}/?restaurant_id=${id}`;
-    console.log('fetchRestaurantReviewsById called', url);
     fetch(url) 
     .then((res) => {
       if (res.status !== 200) {
@@ -70,7 +67,6 @@ class DBHelper {
       return res.json();
     })
     .then(function(json) {
-        console.log('returning reviews');
         callback(null, json);
     })
     .catch(function(err) {

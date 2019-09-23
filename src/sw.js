@@ -9,8 +9,8 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
+// Cache image files.
 workbox.routing.registerRoute(
-  // Cache image files.
   /\.(?:png|gif|jpg|jpeg|webp|svg)$/,
   // Use the cache if it's available.
   new workbox.strategies.CacheFirst({
@@ -31,7 +31,7 @@ const matchAPI = ({url, event }) => {
     const match = new RegExp(".+\/restaurants.*");  // <-- matches any origin
     const matches = match.test(url.href);
     return matches;
-}
+};
 
 workbox.routing.registerRoute(
   matchAPI,
@@ -47,13 +47,32 @@ workbox.routing.registerRoute(
   })
 );
 
+// Caches POST calls
+const matchPOST = ({url, event }) => {
+  const match = new RegExp(".+\/reviews.*");  // <-- matches any origin
+  const matches = match.test(url.href);
+  return matches;
+};
+
+const bgSyncPlugin = new workbox.backgroundSync.Plugin('POST-cache-queue', {
+  maxRetentionTime: 24 * 60 // Retry for max of 24 Hours (specified in minutes)
+});
+
+workbox.routing.registerRoute(
+  matchPOST,
+  new workbox.strategies.NetworkOnly({
+    plugins: [bgSyncPlugin] 
+  }),
+  'POST'
+);
 
 
+// Caches PAGE calls
 const matchPage = ({url, event }) => {
   const match = new RegExp(".+html*");  // <-- matches any origin
   const matches = match.test(url.href);
   return matches;
-}
+};
 
 // Caches Pages calls
 workbox.routing.registerRoute(
@@ -70,3 +89,20 @@ workbox.routing.registerRoute(
   })
 );
 
+/*
+// backgroundsync 
+const queue = new workbox.backgroundSync.Queue('myQueueName');
+
+self.addEventListener('fetch', (event) => {
+  // Clone the request to ensure it's safe to read when
+  // adding to the Queue.
+  console.log('Cloning request');
+  const promiseChain = fetch(event.request.clone())
+  .catch((err) => {
+      console.log('Pushing request');
+      return queue.pushRequest({request: event.request});
+  });
+
+  event.waitUntil(promiseChain);
+});
+*/

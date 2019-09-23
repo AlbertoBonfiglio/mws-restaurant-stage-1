@@ -72,20 +72,22 @@
     <div class="container">
       <input type="hidden" id="restaurant_id" name="restaurant_id" value="-1" required>
       <label for="name"><b>Name</b></label>
-      <input type="text" placeholder="Enter your name" id="name" name="name" required>
+      <input type="text" placeholder="Enter your name" id="name" name="name" required
+              onKeyup="checkform()">
 
       <label for="comments"><b>Rating</b></label>
       <input type="range" name="rating" min="0" max="5" required value=4 required>
 
       <label for="review"><b>Review</b></label>
       <textarea placeholder="Enter your review" name="comments" 
-        rows="5" cols="40" required></textarea>
+        rows="5" cols="40" required
+        onKeyup="checkform()"></textarea>
 
     </div>
 
     <div class="actionbar" style="background-color:#f1f1f1">
       <button type="button" onclick="closeModal()" class="cancelbtn">Cancel</button>
-      <button type="submit" id="button_submit" >Submit</button>
+      <button type="submit" id="button_submit" disabled="disabled"  >Submit</button>
     </div>
   </form>
 </div>

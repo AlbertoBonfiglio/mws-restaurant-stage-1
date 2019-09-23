@@ -211,7 +211,7 @@ input[type=text],textarea {
 }
 
 /* Set a style for all buttons */
-button {
+.modal button {
   background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
@@ -220,13 +220,16 @@ button {
   cursor: pointer;
   width: auto;
 }
+.modal button:disabled{
+  background-color: gray;
+}
 
-button:hover {
+.modal button:hover {
   opacity: 0.8;
 }
 
 /* Extra styles for the cancel button */
-.cancelbtn {
+.modal .cancelbtn {
   width: auto;
   padding: 10px 18px;
   background-color: #f44336;
@@ -338,3 +341,4 @@ span.psw {
      width: 100%;
   }
 }
+
